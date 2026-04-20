@@ -1,29 +1,33 @@
-import express from "express";
-import fetch from "node-fetch";
-import cors from "cors";
+const express = require("express");
+const fetch = require("node-fetch");
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-const TOKEN = "PUT_YOUR_NEW_TOKEN_HERE"; // ⚠️ փոխիր
-const CHAT_ID = "PUT_YOUR_CHAT_ID_HERE";
+const TOKEN = "ՔՈ ՆՈՐ TOKEN";
+const CHAT_ID = "ՔՈ CHAT_ID";
+
+app.get("/", (req, res) => {
+  res.send("Server is running ✅");
+});
 
 app.post("/order", async (req, res) => {
   const { name, phone, address, cart } = req.body;
 
-  let text = "✨ NEW LUMIERÉ ORDER\n\n";
+  let text = "✨ NEW ORDER\n\n";
 
-  if(cart && cart.length > 0){
+  if (cart && cart.length > 0) {
     cart.forEach(item => {
       text += • ${item.name} - ${item.price} AMD\n;
     });
   }
 
-  text += \n👤 Name: ${name};
-  text += \n📞 Phone: ${phone};
-  text += \n📍 Address: ${address};
+  text += \n👤 ${name};
+  text += \n📞 ${phone};
+  text += \n📍 ${address};
 
   try {
     await fetch(https://api.telegram.org/bot${TOKEN}/sendMessage, {
@@ -44,6 +48,6 @@ app.post("/order", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("🚀 Server running");
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Server running 🚀");
 });
