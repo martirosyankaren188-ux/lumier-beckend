@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lumieré Checkout</title>
+<link rel="stylesheet" href="checkout.css">
+</head>
+
+<body>
+
+<div class="checkout-container">
+
+<h1>Checkout</h1>
+
+<div id="order-summary"></div>
+
+<form id="checkout-form">
+  <input id="name" placeholder="Full Name" required>
+  <input id="phone" placeholder="Phone" required>
+  <input id="address" placeholder="Address" required>
+
+  <button type="submit">Place Order</button>
+</form>
+
+</div>
+
+<script>
+document.getElementById("checkout-form").addEventListener("submit", sendOrder);
+
+function sendOrder(e){
+    e.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let phone = document.getElementById("phone").value;
+    let address = document.getElementById("address").value;
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    fetch("https://YOUR-RENDER-LINK.onrender.com/order", { // 🔥 փոխիր
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name,
+            phone,
+            address,
+            cart
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success){
+            alert("Order sent ✅");
+            localStorage.removeItem("cart");
+            window.location.href = "index.html";
+        } else {
+            alert("Error ❌");
+        }
+    })
+    .catch(() => alert("Server error ❌"));
+}
+</script>
+
+</body>
+</html>
